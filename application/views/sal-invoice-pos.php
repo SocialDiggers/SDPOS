@@ -229,7 +229,7 @@
 	                </tr> -->
 	                <tr>
 						<td style=" padding-left: 2px; padding-right: 2px;" colspan="5" align="right"><?= $this->lang->line('other_charges'); ?></td>
-						<td style=" padding-left: 2px; padding-right: 2px;" align="right"><?= $other_charges_amt; ?></td>
+						<td style=" padding-left: 2px; padding-right: 2px;" align="right"><?= str_replace('.00', '', number_format($other_charges_amt, 2, '.', '')); ?></td>
 					</tr>
 	                <?php if(!empty($tot_discount_to_all_amt) && $tot_discount_to_all_amt!=0) {?>
 					<tr>
