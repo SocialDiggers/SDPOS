@@ -1,0 +1,9 @@
+Item Name,Category Name,SKU,HSN,Unit Name,Alert Quantity,Brand Name,Lot Number,Expire Date,Purchase Price,Tax Name,Tax Value,Tax Type,Sales Price,Opening Stock,Image
+Panadol 500mg,Medicine (OTC),PAN500,,Tablet,20,GSK,L001,2026-06-30,25,Sales Tax,17,Percentage,30,100,panadol.jpg
+Brufen 400mg,Medicine (NSAID),BRU400,,Tablet,15,Abbott,L002,2026-05-31,35,Sales Tax,17,Percentage,45,80,brufen.jpg
+Augmentin 625mg,Medicine (Antibiotic),AUG625,,Tablet,10,GSK,L003,2026-04-30,280,Sales Tax,17,Percentage,320,40,augmentin.jpg
+Tramadol 50mg,Medicine (Narcotic),TRA50,,Capsule,5,Searle,L004,2025-12-31,40,Sales Tax,17,Percentage,55,30,tramadol.jpg
+Disposable Syringe 5ml,Surgical (Disposable),SYR5,,Piece,50,BD,L005,,20,Sales Tax,17,Percentage,30,200,syringe5ml.jpg
+Cotton Roll 400g,Surgical (Dressing),COT400,,Pack,20,Local,L006,,180,Sales Tax,17,Percentage,220,60,cotton.jpg
+Hand Sanitizer 500ml,Consumer (Personal Care),SAN500,,Bottle,15,Dettol,L007,2027-01-31,250,Sales
+
