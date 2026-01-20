@@ -51,11 +51,8 @@
                            coalesce(b.tot_discount_to_all_amt,0) as tot_discount_to_all_amt,
                            coalesce(b.round_off,0) as round_off,
                            b.payment_status,
-                           b.payment_status,
                            b.created_by,
                            b.sales_mode
-
-                           FROM db_customers a,
 
                            FROM db_customers a,
                            db_sales b 
@@ -126,7 +123,7 @@
 		            <?php echo (!empty(trim($company_postcode))) ? "-".$company_postcode : '';?>
 		            <br>
 		            <?php echo (!empty(trim($company_gst_no))) ? $this->lang->line('gst_number').": ".$company_gst_no."<br>" : '';?>
-		            <?php echo (!empty(trim($company_vat_number))) ? $this->lang->line('vat_number').": ".$company_vat_number."<br>" : '';?>
+
 		            <?php if(!empty(trim($company_mobile))) 
 		            		{ 
 		            			echo $this->lang->line('phone').": ".$company_mobile;
@@ -142,7 +139,7 @@
 		</tr>
 			</td>
 		</tr>
-		<tr><td align="center"><strong style="border: 2px solid #000; padding: 5px; font-size: 14px; display: inline-block; margin-bottom: 5px;"><?= $invoice_header; ?></strong></td></tr>
+		<tr><td align="center"><strong style="border: 2px solid #000; padding: 3px; font-size: 11px; display: inline-block; margin-bottom: 5px;"><?= $invoice_header; ?></strong></td></tr>
 		<tr>
 			<td>
 				<table width="100%">
@@ -177,10 +174,10 @@
 					<thead>
 					<tr style="border-top: 2px solid #000; border-bottom: 2px solid #000;">
 						<th style="font-size: 11px; text-align: left;padding: 5px 2px;">#</th>
-						<th style="font-size: 11px; text-align: left;padding: 5px 2px;"><?= $this->lang->line('description'); ?></th>
-						<th style="font-size: 11px; text-align: left;padding: 5px 2px;"><?= $this->lang->line('price'); ?></th>
-						<th style="font-size: 11px; text-align: center;padding: 5px 2px;"><?= $this->lang->line('quantity'); ?></th>
-						<th style="font-size: 11px; text-align: right;padding: 5px 2px;"><?= $this->lang->line('discount'); ?></th>
+						<th style="font-size: 11px; text-align: left;padding: 5px 2px;">Product</th>
+						<th style="font-size: 11px; text-align: left;padding: 5px 2px;">Price</th>
+						<th style="font-size: 11px; text-align: center;padding: 5px 2px;">Qty</th>
+						<th style="font-size: 11px; text-align: right;padding: 5px 2px;">Disc.</th>
 						<th style="font-size: 11px; text-align: right;padding: 5px 2px;"><?= $this->lang->line('total'); ?></th>
 					</tr>
 					</thead>
@@ -195,10 +192,10 @@
 			                  echo "<tr>";  
 			                  echo "<td style='padding-left: 2px; padding-right: 2px;' valign='top'>".++$i."</td>";
 			                  echo "<td style='padding-left: 2px; padding-right: 2px;'>".$res2->item_name."</td>";
-			                  echo "<td style='padding-left: 2px; padding-right: 2px;'>".$res2->price_per_unit."</td>";
-			                  echo "<td style='text-align: center;padding-left: 2px; padding-right: 2px;'>".$res2->sales_qty."</td>";
-			                  echo "<td style='text-align: right;padding-left: 2px; padding-right: 2px;'>".number_format(($res2->discount_amt),2,'.','')."</td>";
-			                  echo "<td style='text-align: right;padding-left: 2px; padding-right: 2px;' >".number_format(($res2->total_cost),2,'.','')."</td>";
+			                  echo "<td style='padding-left: 2px; padding-right: 2px;'>".str_replace('.00', '', number_format($res2->price_per_unit, 2, '.', ''))."</td>";
+			                  echo "<td style='text-align: center;padding-left: 2px; padding-right: 2px;'>".str_replace('.00', '', number_format($res2->sales_qty, 2, '.', ''))."</td>";
+			                  echo "<td style='text-align: right;padding-left: 2px; padding-right: 2px;'>".str_replace('.00', '', number_format($res2->discount_amt, 2, '.', ''))."</td>";
+			                  echo "<td style='text-align: right;padding-left: 2px; padding-right: 2px;' >".str_replace('.00', '', number_format($res2->total_cost, 2, '.', ''))."</td>";
 			                  echo "</tr>";  
 			                  //$tot_qty+=$res2->sales_qty;
 			                  $subtotal+=($res2->total_cost);
@@ -216,11 +213,11 @@
 							<?= (is_tax_disabled()) ? $this->lang->line('subtotal') : $this->lang->line('before_tax'); ?>
 								
 							</td>
-						<td style=" padding-left: 2px; padding-right: 2px;" align="right"><?= number_format(($before_tax),2,'.','');?></td>
+						<td style=" padding-left: 2px; padding-right: 2px;" align="right"><?= str_replace('.00', '', number_format(($before_tax),2,'.',''));?></td>
 					</tr>
 					<tr class="<?=tax_disable_class()?>">
 						<td style=" padding-left: 2px; padding-right: 2px;" colspan="5" align="right"><?= $this->lang->line('tax_amount'); ?></td>
-						<td style=" padding-left: 2px; padding-right: 2px;" align="right"><?= number_format(($tax_amt),2,'.','');?></td>
+						<td style=" padding-left: 2px; padding-right: 2px;" align="right"><?= str_replace('.00', '', number_format(($tax_amt),2,'.',''));?></td>
 					</tr>
 					<!-- <tr >
 						<td style=" padding-left: 2px; padding-right: 2px;" colspan="4" align="right"><?= $this->lang->line('subtotal'); ?></td>
@@ -237,7 +234,7 @@
 	                <?php if(!empty($tot_discount_to_all_amt) && $tot_discount_to_all_amt!=0) {?>
 					<tr>
 						<td style=" padding-left: 2px; padding-right: 2px;" colspan="5" align="right"><?= $this->lang->line('discount_on_all'); ?> <?= ($discount_to_all_type=='in_percentage') ? $discount_to_all_input .'%' : $discount_to_all_input.'[Fixed]' ;?></td>
-						<td style=" padding-left: 2px; padding-right: 2px;" align="right"><?= number_format(($tot_discount_to_all_amt),2,'.',''); ?></td>
+						<td style=" padding-left: 2px; padding-right: 2px;" align="right"><?= str_replace('.00', '', number_format(($tot_discount_to_all_amt),2,'.','')); ?></td>
 					</tr>
 					<?php } ?>
 					
@@ -245,7 +242,7 @@
 					<!-- <tr><td style="border-bottom-style: dashed;border-width: 0.1px;" colspan="5"></td></tr>   -->
 					<tr>
 						<td style=" padding-left: 2px; padding-right: 2px;font-weight: bold; font-size: 16px; border-top: 1px solid #000; border-bottom: 1px solid #000;" colspan="5" align="right"><?= $this->lang->line('total'); ?></td>
-						<td style=" padding-left: 2px; padding-right: 2px;font-weight: bold; font-size: 16px; border-top: 1px solid #000; border-bottom: 1px solid #000;" align="right"><?= $grand_total; ?></td>
+						<td style=" padding-left: 2px; padding-right: 2px;font-weight: bold; font-size: 16px; border-top: 1px solid #000; border-bottom: 1px solid #000;" align="right"><?= str_replace('.00', '', number_format($grand_total, 2, '.', '')); ?></td>
 					</tr>
 					
 					<!-- change_return_status -->
@@ -253,30 +250,30 @@
 						$change_return_amount = get_change_return_amount($sales_id); ?>
 						<tr>
 							<td style=" padding-left: 2px; padding-right: 2px;" colspan="5" align="right"><?= $this->lang->line('paid_amount'); ?></td>
-							<td style=" padding-left: 2px; padding-right: 2px;" align="right"><?= number_format($paid_amount+$change_return_amount,2,'.',''); ?></td>
+							<td style=" padding-left: 2px; padding-right: 2px;" align="right"><?= str_replace('.00', '', number_format($paid_amount+$change_return_amount,2,'.','')); ?></td>
 						</tr>
 						<tr>
 							<td style=" padding-left: 2px; padding-right: 2px;" colspan="5" align="right"><?= $this->lang->line('change_return'); ?></td>
-							<td style=" padding-left: 2px; padding-right: 2px;" align="right"><?= number_format($change_return_amount,2,'.',''); ?></td>
+							<td style=" padding-left: 2px; padding-right: 2px;" align="right"><?= str_replace('.00', '', number_format($change_return_amount,2,'.','')); ?></td>
 						</tr>
 					<?php }
 					else{ ?>
 						<tr>
 						<td style=" padding-left: 2px; padding-right: 2px;" colspan="5" align="right"><?= $this->lang->line('paid_amount'); ?></td>
-						<td style=" padding-left: 2px; padding-right: 2px;" align="right"><?= number_format($paid_amount,2,'.',''); ?></td>
+						<td style=" padding-left: 2px; padding-right: 2px;" align="right"><?= str_replace('.00', '', number_format($paid_amount,2,'.','')); ?></td>
 					</tr>
 					
 					<?php } ?>
 					<tr>
 						<td style=" padding-left: 2px; padding-right: 2px;" colspan="5" align="right"><?= $this->lang->line('customer_due'); ?></td>
-						<td style=" padding-left: 2px; padding-right: 2px;" align="right"><?= number_format($customer_due,2,'.',''); ?></td>
+						<td style=" padding-left: 2px; padding-right: 2px;" align="right"><?= str_replace('.00', '', number_format($customer_due,2,'.','')); ?></td>
 					</tr>
 					
 					<tr>
 						<td colspan="6" align="center">----------<?= $this->lang->line('thanks_you_visit_again'); ?>----------</td>
 					</tr>
 
-					<tr>
+					<!-- <tr>
 						<td colspan="6" align="center">
 						
 							<div style="display:inline-block;vertical-align:middle;line-height:16px !important;">	
@@ -284,7 +281,7 @@
 							</div>
 						
 						</td>
-					</tr>
+					</tr> -->
 
 					<tr>
 						<td colspan="6" align="center" style="padding-top: 10px;">
