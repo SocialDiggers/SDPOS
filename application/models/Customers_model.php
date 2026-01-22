@@ -795,4 +795,42 @@ class Customers_model extends CI_Model {
 		$this->db->trans_commit();
 		return "success";
 	}
+
+	public function get_statement_data($customer_id){
+		//1. Sales (Debits)
+		$this->db->select("sales_date as date, sales_code as ref, grand_total as amount, 'Invoice' as type, 'dr' as entry_type");
+		$this->db->from('db_sales');
+		$this->db->where('customer_id', $customer_id);
+		$this->db->where('sales_status','Final');
+		$q1 = $this->db->get_compiled_select();
+
+		//2. Sales Return (Credits)
+		$this->db->select("return_date as date, return_code as ref, grand_total as amount, 'Sales Return' as type, 'cr' as entry_type");
+		$this->db->from('db_salesreturn');
+		$this->db->where('customer_id', $customer_id);
+		$q2 = $this->db->get_compiled_select();
+
+		//3. Sales Payments (Credits)
+		$this->db->select("a.payment_date as date, a.payment_type as ref, a.payment as amount, 'Payment' as type, 'cr' as entry_type");
+		$this->db->from('db_salespayments as a');
+		$this->db->join('db_sales as b', 'a.sales_id=b.id');
+		$this->db->where('b.customer_id', $customer_id);
+		$q3 = $this->db->get_compiled_select();
+		
+		//4. Opening Balance Payments (Credits)
+		$this->db->select("payment_date as date, payment_type as ref, payment as amount, 'OB Payment' as type, 'cr' as entry_type");
+		$this->db->from('db_cobpayments');
+		$this->db->where('customer_id', $customer_id);
+		$q4 = $this->db->get_compiled_select();
+
+		//5. Return Payments (Debits)
+		$this->db->select("a.payment_date as date, a.payment_type as ref, a.payment as amount, 'Return Payment' as type, 'dr' as entry_type");
+		$this->db->from('db_salespaymentsreturn as a');
+		$this->db->join('db_salesreturn as b', 'a.return_id=b.id');
+		$this->db->where('b.customer_id', $customer_id);
+		$q5 = $this->db->get_compiled_select();
+
+		$query = $this->db->query("$q1 UNION ALL $q2 UNION ALL $q3 UNION ALL $q4 UNION ALL $q5 ORDER BY date ASC");
+		return $query->result();
+	}
 }

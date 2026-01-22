@@ -15,6 +15,42 @@ class Customers extends MY_Controller {
 		$data['page_title']=$this->lang->line('customers_list');
 		$this->load->view('customers-view',$data);
 	}
+	public function details($id){
+		$this->permission_check('customers_view');
+		$data=$this->data;
+		$data['page_title']=$this->lang->line('customer_details');
+		$data['id']=$id;
+		$result=$this->customers->get_details($id,$data);
+		$data=array_merge($data,$result);
+		$this->load->view('customer-details', $data);
+	}
+	public function print_statement($id){
+		$this->permission_check('customers_view');
+		$data=$this->data;
+		
+		$this->load->model('company_model');
+		$company = $this->company_model->get_details();
+		if(is_object($company)){
+			$company = (array) $company;
+		}
+		
+		$data['company_name'] = $company['company_name'];
+		$data['company_mobile'] = $company['mobile'];
+		$data['company_email'] = $company['email'];
+		$data['company_address'] = $company['address'];
+
+		$customer = $this->customers->get_details($id,array());
+		$data['customer_name'] = $customer['customer_name'];
+		$data['customer_mobile'] = $customer['mobile'];
+		$data['customer_email'] = $customer['email'];
+		$data['customer_address'] = $customer['address'];
+		$data['customer_city'] = $customer['city'];
+		$data['opening_balance'] = $customer['opening_balance'];
+		
+		$data['statement_data'] = $this->customers->get_statement_data($id);
+		
+		$this->load->view('print-customer-statement', $data);
+	}
 	public function add()
 	{
 		$this->permission_check('customers_add');
@@ -92,6 +128,11 @@ class Customers extends MY_Controller {
 											Action <span class="caret"></span>
 										</a>
 										<ul role="menu" class="dropdown-menu dropdown-light pull-right">';
+											$str2.='<li>
+												<a title="View Details" href="customers/details/'.$customers->id.'">
+													<i class="fa fa-fw fa-eye text-blue"></i>View Details
+												</a>
+											</li>';
 
 											if($this->permissions('customers_edit')&& $customers->id!=1)
 											$str2.='<li>

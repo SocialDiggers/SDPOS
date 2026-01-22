@@ -5,9 +5,17 @@ class Reports_model extends CI_Model {
 
 	public function show_sales_report(){
 		extract($_POST);
+		$from_date = isset($from_date) ? $from_date : '';
+		$to_date = isset($to_date) ? $to_date : '';
+		$payment_status = isset($payment_status) ? $payment_status : '';
+		$view_all = isset($view_all) ? $view_all : 'no';
 
-		$from_date=date("Y-m-d",strtotime($from_date));
-		$to_date=date("Y-m-d",strtotime($to_date));
+		if(!empty($from_date)){
+			$from_date=date("Y-m-d",strtotime($from_date));
+		}
+		if(!empty($to_date)){
+			$to_date=date("Y-m-d",strtotime($to_date));
+		}
 		
 		$this->db->select("a.id,a.sales_code,a.sales_date,b.customer_name,b.customer_code,a.grand_total,a.paid_amount");
 	    
@@ -81,9 +89,16 @@ class Reports_model extends CI_Model {
 
 	public function show_sales_return_report(){
 		extract($_POST);
+		$from_date = isset($from_date) ? $from_date : '';
+		$to_date = isset($to_date) ? $to_date : '';
+		$view_all = isset($view_all) ? $view_all : 'no';
 
-		$from_date=date("Y-m-d",strtotime($from_date));
-		$to_date=date("Y-m-d",strtotime($to_date));
+		if(!empty($from_date)){
+			$from_date=date("Y-m-d",strtotime($from_date));
+		}
+		if(!empty($to_date)){
+			$to_date=date("Y-m-d",strtotime($to_date));
+		}
 		
 		$this->db->select("a.id,a.return_code,a.return_date,b.customer_name,b.customer_code,a.grand_total,a.paid_amount");
 	    
@@ -389,14 +404,25 @@ class Reports_model extends CI_Model {
 	}
 	public function show_item_sales_report(){
 		extract($_POST);
+		$from_date = isset($from_date) ? $from_date : '';
+		$to_date = isset($to_date) ? $to_date : '';
+		$item_id = isset($item_id) ? $item_id : '';
+		$customer_id = isset($customer_id) ? $customer_id : '';
+		$view_all = isset($view_all) ? $view_all : 'no';
 
-		$from_date=date("Y-m-d",strtotime($from_date));
-		$to_date=date("Y-m-d",strtotime($to_date));
+		if(!empty($from_date)){
+			$from_date=date("Y-m-d",strtotime($from_date));
+		}
+		if(!empty($to_date)){
+			$to_date=date("Y-m-d",strtotime($to_date));
+		}
 		
 		$this->db->select("a.id,a.sales_code,a.sales_date,b.customer_name,b.customer_code,c.total_cost");
 		$this->db->select("c.sales_qty,d.item_name");
 	    
-	    
+		if($customer_id!=''){
+			$this->db->where("a.customer_id=$customer_id");
+		}
 		if($view_all=="no"){
 			$this->db->where("(a.sales_date>='$from_date' and a.sales_date<='$to_date')");
 		}
@@ -635,9 +661,15 @@ class Reports_model extends CI_Model {
 	}
 	public function show_sales_payments_report(){
 		extract($_POST);
+		$from_date = isset($from_date) ? $from_date : '';
+		$to_date = isset($to_date) ? $to_date : '';
 		
-		$from_date=date("Y-m-d",strtotime($from_date));
-		$to_date=date("Y-m-d",strtotime($to_date));
+		if(!empty($from_date)){
+			$from_date=date("Y-m-d",strtotime($from_date));
+		}
+		if(!empty($to_date)){
+			$to_date=date("Y-m-d",strtotime($to_date));
+		}
 		$payment_type = $this->input->post('payment_type');
 		$this->db->select("c.id,c.sales_code,a.payment_date,b.customer_name,b.customer_code,a.payment_type,a.payment_note,a.payment");
 	    
